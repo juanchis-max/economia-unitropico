@@ -99,17 +99,58 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('') || '<p class="texto-tenue">No hay indicadores para mostrar.</p>';
     }
 
-    // ---- Tabla ----
+    // ---- Explorador regional: filtra y exporta la misma tabla visible ----
     if (cuerpoTabla) {
-      cuerpoTabla.innerHTML = d.tabla.map((fila) => `
-        <tr>
-          <td><strong>${esc(fila.indicador)}</strong><div class="texto-tenue" style="font-size:0.75rem;">${esc(fila.cobertura)}</div></td>
-          <td>${esc(fila.valor)}</td>
-          <td class="${claseTendencia(fila.tendencia)}">${esc(fila.variacion)}</td>
-          <td class="texto-tenue">${esc(fila.fuente)}</td>
-          <td class="texto-tenue">${esc(fila.periodo)}</td>
-        </tr>
-      `).join('') || '<tr><td colspan="5" class="texto-tenue">No hay filas para mostrar.</td></tr>';
+      const buscar = document.getElementById('buscar-regional');
+      const cobertura = document.getElementById('cobertura-regional');
+      const estado = document.getElementById('estado-regional');
+      const csv = document.getElementById('csv-regional');
+      const normalizar = (v) => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      let visibles = [];
+      if (cobertura) {
+        const anterior = cobertura.value;
+        cobertura.replaceChildren(new Option('Todas las coberturas', ''));
+        [...new Set(d.tabla.map(f => f.cobertura).filter(Boolean))].sort().forEach(v => cobertura.add(new Option(v, v)));
+        if ([...cobertura.options].some(o => o.value === anterior)) cobertura.value = anterior;
+      }
+      function filtrar() {
+        const q = normalizar(buscar && buscar.value).trim();
+        visibles = d.tabla.filter(f => (!cobertura || !cobertura.value || f.cobertura === cobertura.value) &&
+          normalizar([f.indicador, f.cobertura, f.fuente, f.periodo].join(' ')).includes(q));
+        cuerpoTabla.innerHTML = visibles.map(fila => `
+          <tr>
+            <td><strong>${esc(fila.indicador)}</strong><div class="texto-tenue">${esc(fila.cobertura)}</div></td>
+            <td>${esc(fila.valor)}</td><td class="${claseTendencia(fila.tendencia)}">${esc(fila.variacion)}</td>
+            <td class="texto-tenue">${esc(fila.fuente)}</td><td class="texto-tenue">${esc(fila.periodo)}</td>
+          </tr>`).join('') || '<tr><td colspan="5">No hay resultados. Prueba otra búsqueda o limpia los filtros.</td></tr>';
+        if (estado) estado.textContent = visibles.length + ' de ' + d.tabla.length + ' indicadores';
+        if (csv) csv.disabled = !visibles.length;
+      }
+      if (buscar) buscar.oninput = filtrar;
+      if (cobertura) cobertura.onchange = filtrar;
+      const limpiar = document.getElementById('limpiar-regional');
+      if (limpiar) limpiar.onclick = () => {
+        if (buscar) buscar.value = '';
+        if (cobertura) cobertura.value = '';
+        filtrar();
+        if (buscar) buscar.focus();
+      };
+      if (csv) csv.onclick = () => {
+        const columnas = ['indicador', 'cobertura', 'valor', 'variacion', 'fuente', 'periodo'];
+        // Neutraliza fórmulas al abrir contenido editable en hojas de cálculo.
+        const celda = v => {
+          let s = String(v == null ? '' : v);
+          if (/^[=+@-]/.test(s.trimStart())) s = "'" + s;
+          return '"' + s.replace(/"/g, '""') + '"';
+        };
+        const filas = [columnas, ...visibles.map(f => columnas.map(k => f[k]))];
+        const url = URL.createObjectURL(new Blob(['\uFEFF' + filas.map(f => f.map(celda).join(';')).join('\r\n')], {type: 'text/csv;charset=utf-8'}));
+        const a = document.createElement('a');
+        a.href = url; a.download = 'indicadores-regionales-demo.csv';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      };
+      filtrar();
     }
 
     // ---- Gráficos (si Chart.js no cargó, el resto de la página igual funciona) ----
