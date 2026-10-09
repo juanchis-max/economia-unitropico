@@ -91,7 +91,7 @@
       "imagen_fondo": "",
       "boton_principal": {
         "texto": "Explorar Datos Regionales",
-        "enlace": "datos.html"
+        "enlace": "datos.html#explorador-regional"
       },
       "boton_secundario": {
         "texto": "Estudios e Investigaciones",
