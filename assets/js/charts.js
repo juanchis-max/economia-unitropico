@@ -1,0 +1,175 @@
+// =========================================================
+// charts.js — Indicadores, gráficos y tabla de datos.html
+// Datos: data/indicadores.json (se edita desde el panel).
+// Si config.js tiene enlaces de Google Sheets, esas pestañas
+// tienen prioridad sobre el JSON.
+// Requiere: contenido.js, Chart.js y PapaParse.
+// =========================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  const contenedorKpis = document.getElementById('kpis-datos');
+  const cuerpoTabla = document.getElementById('cuerpo-tabla-indicadores');
+  if (!contenedorKpis && !cuerpoTabla) return; // no estamos en datos.html
+
+  const esc = (s) => (window.CC ? CC.escapar(s == null ? '' : s) : String(s == null ? '' : s));
+  const enlaces = typeof SHEET_URLS !== 'undefined' ? SHEET_URLS : {};
+
+  // ---- Google Sheets (se descarga una sola vez por visita) ----
+  const cacheSheets = {};
+  function desdeSheets(clave) {
+    if (!(clave in cacheSheets)) {
+      const url = enlaces[clave];
+      cacheSheets[clave] = !url || typeof Papa === 'undefined'
+        ? Promise.resolve(null)
+        : new Promise((resolve) => {
+            Papa.parse(url, {
+              download: true, header: true, skipEmptyLines: true,
+              complete: (r) => resolve(r.data),
+              error: (err) => { console.warn(`Google Sheets (${clave}): se usa el JSON.`, err); resolve(null); }
+            });
+          });
+    }
+    return cacheSheets[clave];
+  }
+
+  async function obtenerDatos() {
+    const respaldo = (window.CC ? await CC.indicadores() : null) || {};
+    const [fKpis, fPib, fDes, fSec, fTab] = await Promise.all(['kpis', 'pibSerie', 'desempleo', 'sectores', 'tabla'].map(desdeSheets));
+    return {
+      respaldo,
+      kpis: fKpis ? fKpis.map((f) => ({
+        titulo: f.titulo, subtitulo: f.subtitulo, valor: f.valor, variacion: f.variacion,
+        tendencia: (f.tendencia || '').trim().toLowerCase(), periodo: f.periodo,
+        icono: (f.icono || 'grafico').trim().toLowerCase()
+      })) : (respaldo.kpis || []),
+      pib: fPib ? { anios: fPib.map((f) => f.anio), casanare: fPib.map((f) => parseFloat(f.casanare)), nacional: fPib.map((f) => parseFloat(f.nacional)) }
+        : (respaldo.pib_serie || { anios: [], casanare: [], nacional: [] }),
+      desempleo: fDes ? { trimestres: fDes.map((f) => f.trimestre), valores: fDes.map((f) => parseFloat(f.valor)) }
+        : (respaldo.desempleo_trimestral || { trimestres: [], valores: [] }),
+      sectores: fSec ? fSec.map((f) => ({ nombre: f.nombre, valor: parseFloat(f.valor) }))
+        : ((respaldo.composicion_sectorial || {}).sectores || []),
+      tabla: fTab ? fTab.map((f) => ({
+        indicador: f.indicador, cobertura: f.cobertura, valor: f.valor, variacion: f.variacion,
+        tendencia: (f.tendencia || '').trim().toLowerCase(), fuente: f.fuente, periodo: f.periodo
+      })) : (respaldo.tabla_indicadores || [])
+    };
+  }
+
+  const iconosSvg = {
+    grafico: 'M7 12l3-3 3 3 4-4M3 4h18v14a1 1 0 01-1 1H4a1 1 0 01-1-1V4z',
+    personas: 'M17 20h5v-2a3 3 0 00-5.356-1.857M9 20H4v-2a3 3 0 015.356-1.857M9 20v-2a5 5 0 0110 0v2m-5-9a3 3 0 11-6 0 3 3 0 016 0z',
+    etiqueta: 'M7 7h.01M3 11l7-7h6l5 5v6l-7 7-11-11z',
+    hoja: 'M11 20A7 7 0 019.8 6.1C15.5 5 20 5 20 5s0 4.5-1.1 10.2A7 7 0 0111 20zM11 20v-9',
+    moneda: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+    mapa: 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z'
+  };
+  const flecha = (t) => (t === 'subida' ? '▲' : t === 'bajada' ? '▼' : '■');
+  const claseTendencia = (t) => (t === 'subida' ? 'subida' : t === 'bajada' ? 'bajada' : 'texto-tenue');
+
+  let graficos = [];
+
+  async function render() {
+    const d = await obtenerDatos();
+
+    // ---- Títulos de los gráficos (data-ind="ruta" en el HTML) ----
+    document.querySelectorAll('[data-ind]').forEach((el) => {
+      const v = el.dataset.ind.split('.').reduce((o, k) => (o == null ? undefined : o[k]), d.respaldo);
+      if (typeof v === 'string') el.textContent = v;
+    });
+
+    // ---- KPIs ----
+    if (contenedorKpis) {
+      contenedorKpis.innerHTML = d.kpis.map((kpi) => `
+        <div class="tarjeta" style="padding:20px;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+            <div style="width:34px;height:34px;border-radius:7px;background:var(--marron-claro);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" fill="none" stroke="var(--marron-oscuro)" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${iconosSvg[kpi.icono] || iconosSvg.grafico}"/></svg>
+            </div>
+            <div>
+              <div style="font-size:0.68rem;color:var(--gris-medio);text-transform:uppercase;letter-spacing:0.03em;">${esc(kpi.titulo)}</div>
+              <div style="font-size:0.72rem;color:var(--gris-medio);">${esc(kpi.subtitulo)}</div>
+            </div>
+          </div>
+          <div style="font-family:var(--fuente-serif);font-weight:700;font-size:1.5rem;color:var(--marron-oscuro);">${esc(kpi.valor)}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+            <span class="${claseTendencia(kpi.tendencia)}" style="font-size:0.82rem;">${flecha(kpi.tendencia)} ${esc(kpi.variacion)}</span>
+          </div>
+          <div class="texto-tenue" style="font-size:0.72rem;margin-top:6px;">${esc(kpi.periodo)}</div>
+        </div>
+      `).join('') || '<p class="texto-tenue">No hay indicadores para mostrar.</p>';
+    }
+
+    // ---- Tabla ----
+    if (cuerpoTabla) {
+      cuerpoTabla.innerHTML = d.tabla.map((fila) => `
+        <tr>
+          <td><strong>${esc(fila.indicador)}</strong><div class="texto-tenue" style="font-size:0.75rem;">${esc(fila.cobertura)}</div></td>
+          <td>${esc(fila.valor)}</td>
+          <td class="${claseTendencia(fila.tendencia)}">${esc(fila.variacion)}</td>
+          <td class="texto-tenue">${esc(fila.fuente)}</td>
+          <td class="texto-tenue">${esc(fila.periodo)}</td>
+        </tr>
+      `).join('') || '<tr><td colspan="5" class="texto-tenue">No hay filas para mostrar.</td></tr>';
+    }
+
+    // ---- Gráficos (si Chart.js no cargó, el resto de la página igual funciona) ----
+    graficos.forEach((g) => g.destroy());
+    graficos = [];
+    if (typeof Chart === 'undefined') {
+      console.warn('Chart.js no está disponible; se omiten los gráficos.');
+      return;
+    }
+    const ctxPib = document.getElementById('graficoPib');
+    const ctxDesempleo = document.getElementById('graficoDesempleo');
+    const ctxSectores = document.getElementById('graficoSectores');
+
+    if (ctxPib) {
+      graficos.push(new Chart(ctxPib, {
+        type: 'line',
+        data: {
+          labels: d.pib.anios,
+          datasets: [
+            { label: 'Casanare (%)', data: d.pib.casanare, borderColor: '#6B4E3D', backgroundColor: 'rgba(107,78,61,0.10)', fill: true, tension: 0.3, borderWidth: 2.5, pointBackgroundColor: '#C9A66B', pointRadius: 4 },
+            { label: 'Promedio Nacional (%)', data: d.pib.nacional, borderColor: '#A9877B', borderDash: [5, 5], tension: 0.3, borderWidth: 2, pointRadius: 0 }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Manrope', size: 11 } } } },
+          scales: { y: { ticks: { callback: (v) => v + '%' } } }
+        }
+      }));
+    }
+    if (ctxDesempleo) {
+      graficos.push(new Chart(ctxDesempleo, {
+        type: 'bar',
+        data: {
+          labels: d.desempleo.trimestres,
+          datasets: [{ label: 'Desocupación (%)', data: d.desempleo.valores, backgroundColor: '#A9877B', borderRadius: 4, maxBarThickness: 42 }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { ticks: { callback: (v) => v + '%' } } }
+        }
+      }));
+    }
+    if (ctxSectores) {
+      graficos.push(new Chart(ctxSectores, {
+        type: 'doughnut',
+        data: {
+          labels: d.sectores.map((s) => s.nombre),
+          datasets: [{ data: d.sectores.map((s) => s.valor), backgroundColor: ['#6B4E3D', '#A9877B', '#C9A66B', '#D4BFB4', '#8C6F5E', '#E3D5C8'], borderWidth: 2, borderColor: '#FFFFFF' }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, cutout: '68%',
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 }, padding: 10 } } }
+        }
+      }));
+    }
+  }
+
+  render();
+  // Vista previa del panel: volver a dibujar cuando cambie el borrador
+  document.addEventListener('cc:actualizado', render);
+});

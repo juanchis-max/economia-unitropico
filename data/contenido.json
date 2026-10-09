@@ -1,0 +1,176 @@
+{
+  "general": {
+    "logo": "assets/img/logo-unitropico.jpg",
+    "logo_alt": "Logo Unitrópico",
+    "nombre": "Programa de Economía",
+    "subnombre": "UNITRÓPICO",
+    "franja": {
+      "marca": "Unitrópico",
+      "texto": "Facultad de Ciencias Económicas y Administrativas",
+      "sede": "📍 Sede Principal: Yopal, Casanare"
+    },
+    "menu": [
+      { "texto": "Inicio", "enlace": "index.html" },
+      { "texto": "Datos Económicos", "enlace": "datos.html" },
+      { "texto": "Investigaciones", "enlace": "investigaciones.html" },
+      { "texto": "Galería", "enlace": "galeria.html" },
+      { "texto": "Comunidad", "enlace": "comunidad.html" },
+      { "texto": "Noticias", "enlace": "noticias.html" },
+      { "texto": "Contacto", "enlace": "contacto.html" }
+    ],
+    "pie": {
+      "nombre": "Programa de Economía",
+      "descripcion": "Universidad Internacional del Trópico Americano — Unitrópico.\nFacultad de Ciencias Económicas y Administrativas.\nYopal, Casanare, Colombia.",
+      "navegacion_titulo": "Navegación",
+      "navegacion": [
+        { "texto": "Inicio", "enlace": "index.html" },
+        { "texto": "Datos Económicos", "enlace": "datos.html" },
+        { "texto": "Investigaciones", "enlace": "investigaciones.html" },
+        { "texto": "Comunidad", "enlace": "comunidad.html" },
+        { "texto": "Noticias", "enlace": "noticias.html" }
+      ],
+      "fuentes_titulo": "Fuentes Homologadas",
+      "fuentes": [
+        "DANE - Cuentas Departamentales",
+        "Banco de la República",
+        "DNP - TerriData Casanare",
+        "Gobernación de Casanare"
+      ],
+      "contacto_titulo": "Contacto Académico",
+      "contacto_texto": "¿Interesado en pasantías o semilleros?",
+      "correo": "economia@unitropico.edu.co",
+      "boton": { "texto": "Buzón de Propuestas", "enlace": "contacto.html#buzon" },
+      "copyright": "© 2025 Programa de Economía — Unitrópico. Contenido de demostración.",
+      "nota": "Diseño institucional estático, ligero y modular."
+    }
+  },
+
+  "inicio": {
+    "hero": {
+      "etiqueta": "Facultad de Ciencias Económicas",
+      "titulo": "Pensamiento económico con visión territorial y rigor científico",
+      "texto": "Formamos economistas líderes en análisis econométrico, política pública y desarrollo productivo sostenible para Casanare y los Llanos Orientales.",
+      "imagen_fondo": "",
+      "boton_principal": { "texto": "Explorar Datos Regionales", "enlace": "datos.html" },
+      "boton_secundario": { "texto": "Estudios e Investigaciones", "enlace": "investigaciones.html" },
+      "cifras": [
+        { "valor": "19", "etiqueta": "Municipios en monitoreo" },
+        { "valor": "+140", "etiqueta": "Estudios y working papers" },
+        { "valor": "3", "etiqueta": "Semilleros activos" }
+      ],
+      "grafico": {
+        "etiqueta": "Observatorio Territorial",
+        "titulo": "Crecimiento Económico Regional",
+        "periodo": "2020-2024",
+        "nota": "Tendencia del PIB de Casanare vs. Promedio Nacional (dato de demostración).",
+        "fuente": "DANE / Cuentas Regionales",
+        "enlace": { "texto": "Ver panel completo →", "enlace": "datos.html" }
+      }
+    },
+    "ejes": {
+      "titulo": "Ejes del Portal Académico",
+      "subtitulo": "Herramientas analíticas, repositorio científico y espacios de encuentro para la comunidad de estudiantes y docentes de Economía.",
+      "tarjetas": [
+        {
+          "icono": "grafico",
+          "titulo": "Datos y Series",
+          "texto": "Visualización de PIB, desempleo, inflación y producción agropecuaria con series descargables.",
+          "enlace_texto": "Explorar tableros →",
+          "enlace": "datos.html"
+        },
+        {
+          "icono": "libro",
+          "titulo": "Investigaciones",
+          "texto": "Catálogo de working papers, artículos y tesis con filtros temáticos y descarga en PDF.",
+          "enlace_texto": "Consultar catálogo →",
+          "enlace": "investigaciones.html"
+        },
+        {
+          "icono": "personas",
+          "titulo": "Comunidad y Foros",
+          "texto": "Semilleros, perfiles de estudiantes, agenda de seminarios y espacio de debate académico.",
+          "enlace_texto": "Ver semilleros →",
+          "enlace": "comunidad.html"
+        },
+        {
+          "icono": "imagen",
+          "titulo": "Galería de Eventos",
+          "texto": "Registro fotográfico de coloquios, simposios y salidas de campo territoriales.",
+          "enlace_texto": "Explorar galería →",
+          "enlace": "galeria.html"
+        }
+      ]
+    },
+    "identidad": {
+      "etiqueta": "Identidad Académica",
+      "mision_titulo": "Misión del Programa",
+      "mision": "El Programa de Economía de Unitrópico forma profesionales éticos, críticos e innovadores capaces de interpretar la realidad económica nacional e internacional, liderando la investigación aplicada para el desarrollo sostenible de la Orinoquía colombiana.",
+      "vision_titulo": "Visión",
+      "vision": "Ser referente en investigación económica y análisis territorial de los Llanos Orientales, consolidando sinergias entre la academia, el sector productivo y las instituciones públicas.",
+      "lineas_titulo": "Líneas de Investigación Activas",
+      "lineas": [
+        { "titulo": "Desarrollo Territorial y Finanzas Públicas", "texto": "regalías, catastro y descentralización fiscal." },
+        { "titulo": "Economía Agrícola y Bioeconomía", "texto": "cadenas de valor del arroz y transición energética." },
+        { "titulo": "Mercado Laboral y Demografía", "texto": "empleo informal y productividad regional." }
+      ],
+      "boton": { "texto": "Postular propuesta de investigación", "enlace": "contacto.html#propuesta" }
+    }
+  },
+
+  "datos": {
+    "hero": {
+      "etiqueta": "División de Investigación Económica · Observatorio de Coyuntura",
+      "titulo": "Observatorio Económico Regional",
+      "texto": "Monitoreo estadístico continuo de tendencias macroeconómicas y series de tiempo de Casanare y la Orinoquía, armonizadas por el Programa de Economía.",
+      "boton": { "texto": "⭳ Descargar Informe Ejecutivo", "enlace": "" }
+    },
+    "nota_pib": "Metodología DANE, base 2015 encadenada de volumen. Dato 2024 provisional.",
+    "tabla_titulo": "Matriz de Indicadores y Microdatos Regionales",
+    "tabla_descripcion": "Conjunto de variables macroeconómicas con enlace a formatos abiertos.",
+    "nota_fuentes": "Fuentes: Departamento Administrativo Nacional de Estadística (DANE), Banco de la República, Departamento Nacional de Planeación (TerriData). Cifras de demostración con fines de maquetación."
+  },
+
+  "contacto": {
+    "hero": {
+      "etiqueta": "ATENCIÓN ACADÉMICA",
+      "titulo": "Contáctanos",
+      "texto": "Escríbenos para pedir información del programa, postular una propuesta de investigación o dejar tu idea en el buzón."
+    },
+    "datos": {
+      "correo": "economia@unitropico.edu.co",
+      "direccion": "Carrera 19 No. 39-40, Yopal, Casanare",
+      "telefono": "",
+      "whatsapp": "",
+      "horario": "",
+      "tiempoRespuesta": "3 días hábiles",
+      "redes": { "facebook": "", "instagram": "", "linkedin": "", "youtube": "", "x": "" },
+      "responsables": { "direccion": "", "investigacion": "", "practicas": "", "secretaria": "" }
+    },
+    "faq": [
+      {
+        "pregunta": "¿Quién puede postular una propuesta de investigación?",
+        "respuesta": "Estudiantes, docentes y egresados del programa, así como investigadores externos interesados en alguna de las tres líneas activas. Usa la pestaña [Postular propuesta](#propuesta) y adjunta tu documento en PDF."
+      },
+      {
+        "pregunta": "¿Qué debería incluir mi propuesta?",
+        "respuesta": "Te recomendamos un documento corto con el título tentativo, la pregunta o problema que quieres estudiar, el objetivo, la metodología prevista y la línea de investigación con la que se relaciona."
+      },
+      {
+        "pregunta": "¿Cómo me inscribo a un semillero?",
+        "respuesta": "Escríbenos desde [Contacto general](#general) con el tema «Semilleros de investigación». Te contaremos qué semilleros tienen cupo y cuándo se reúnen."
+      },
+      {
+        "pregunta": "¿Puedo enviar una sugerencia de forma anónima?",
+        "respuesta": "Sí. En la pestaña [Buzón](#buzon) activa «Enviar de forma anónima»: no te pediremos nombre ni correo, aunque tampoco podremos responderte directamente."
+      },
+      {
+        "pregunta": "¿Cuánto tarda la respuesta?",
+        "respuesta": "Respondemos los mensajes y las propuestas en máximo {plazo}. Los aportes del buzón se revisan cada semana."
+      },
+      {
+        "pregunta": "¿Qué hacen con mis datos personales?",
+        "respuesta": "Los usamos solo para atender tu solicitud, conforme a la Ley 1581 de 2012 y a la política de tratamiento de datos de la universidad. No los publicamos ni los compartimos con terceros."
+      }
+    ]
+  }
+}

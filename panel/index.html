@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Panel de contenido | Programa de Economía</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/custom.css" />
+<link rel="stylesheet" href="panel.css" />
+</head>
+<body class="panel">
+
+<header class="p-barra">
+  <div class="p-marca">
+    <img src="../assets/img/logo-unitropico.jpg" alt="">
+    <div>
+      <strong>Panel de contenido</strong>
+      <span>Programa de Economía</span>
+    </div>
+  </div>
+  <div class="p-estado" id="estado" role="status" aria-live="polite">Cargando…</div>
+  <div class="p-acciones">
+    <button type="button" class="p-btn p-btn-claro" id="btn-vista" aria-pressed="true">Vista previa</button>
+    <button type="button" class="p-btn p-btn-claro" id="btn-zip">Descargar .zip</button>
+    <button type="button" class="p-btn p-btn-dorado" id="btn-publicar">Publicar</button>
+  </div>
+</header>
+
+<div class="p-cuerpo con-vista" id="cuerpo">
+  <nav class="p-lateral" id="lateral" aria-label="Secciones del panel"></nav>
+
+  <main class="p-editor" id="editor" tabindex="-1">
+    <p class="p-cargando">Cargando el contenido del sitio…</p>
+  </main>
+
+  <aside class="p-vista" id="vista" aria-label="Vista previa">
+    <div class="p-vista-barra">
+      <label class="solo-lector" for="vista-pagina">Página de la vista previa</label>
+      <select id="vista-pagina">
+        <option value="index.html">Inicio</option>
+        <option value="datos.html">Datos económicos</option>
+        <option value="contacto.html">Contacto</option>
+      </select>
+      <div class="p-segmento" role="group" aria-label="Tamaño de la vista previa">
+        <button type="button" data-dispositivo="escritorio" aria-pressed="true">Escritorio</button>
+        <button type="button" data-dispositivo="movil" aria-pressed="false">Celular</button>
+      </div>
+      <a id="vista-abrir" class="p-enlace-sutil" target="_blank" rel="noopener">Abrir ↗</a>
+      <button type="button" class="p-cerrar-vista" id="vista-cerrar" aria-label="Cerrar vista previa">✕</button>
+    </div>
+    <div class="p-marco" id="marco">
+      <iframe id="iframe-vista" title="Vista previa del sitio con los cambios sin publicar"></iframe>
+    </div>
+  </aside>
+</div>
+
+<div class="p-avisos" id="avisos" aria-live="polite"></div>
+
+<dialog class="p-dialogo" id="dialogo">
+  <form method="dialog">
+    <h2 id="dialogo-titulo"></h2>
+    <div id="dialogo-texto"></div>
+    <div class="p-dialogo-acciones">
+      <button type="submit" value="no" class="p-btn p-btn-borde" id="dialogo-no">Cancelar</button>
+      <button type="submit" value="si" class="p-btn p-btn-oscuro" id="dialogo-si">Aceptar</button>
+    </div>
+  </form>
+</dialog>
+
+<datalist id="paginas-sitio"></datalist>
+<input type="file" id="selector-archivo" class="solo-lector" tabindex="-1" aria-hidden="true">
+
+<script src="../assets/js/config.js"></script>
+<script src="esquema.js"></script>
+<script src="zip.js"></script>
+<script src="panel.js"></script>
+</body>
+</html>
