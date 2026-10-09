@@ -114,8 +114,8 @@
       "grafico": {
         "etiqueta": "Observatorio Territorial",
         "titulo": "Crecimiento Económico Regional",
-        "periodo": "2020-2024",
-        "nota": "Tendencia del PIB de Casanare vs. Promedio Nacional (dato de demostración).",
+        "periodo": "Según datos aprobados",
+        "nota": "Tasas de crecimiento real anual del PIB de Casanare y Colombia (%).",
         "fuente": "DANE / Cuentas Regionales",
         "enlace": {
           "texto": "Ver panel completo →",
@@ -194,10 +194,10 @@
         "enlace": ""
       }
     },
-    "nota_pib": "Metodología DANE, base 2015 encadenada de volumen. Dato 2024 provisional.",
+    "nota_pib": "Compara tasas de crecimiento real del mismo periodo y metodología. Consulta el enlace de la fuente para conocer la base y las revisiones.",
     "tabla_titulo": "Matriz de Indicadores y Microdatos Regionales",
     "tabla_descripcion": "Conjunto de variables macroeconómicas con enlace a formatos abiertos.",
-    "nota_fuentes": "Fuentes: Departamento Administrativo Nacional de Estadística (DANE), Banco de la República, Departamento Nacional de Planeación (TerriData). Cifras de demostración con fines de maquetación."
+    "nota_fuentes": "Las fuentes y fechas de revisión se muestran junto a cada serie. Los datos pendientes no se incorporan a las gráficas."
   },
   "contacto": {
     "hero": {
