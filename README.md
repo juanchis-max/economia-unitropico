@@ -1,12 +1,12 @@
 # Programa de Economía — Unitrópico
 
-Sitio web estático del Programa de Economía (Yopal, Casanare): portada, observatorio de datos económicos y página de contacto, con un panel para editar el contenido sin tocar el código.
+Sitio web estático del Programa de Economía (Yopal, Casanare): portada, observatorio de datos económicos, noticias, repositorio de investigaciones, galería de eventos y contacto, con un panel para editar el contenido sin tocar el código.
 
 ## Estructura
 
 | Ruta | Qué es |
 |---|---|
-| `index.html`, `datos.html`, `contacto.html` | Páginas del sitio |
+| `index.html`, `datos.html`, `noticias.html`, `investigaciones.html`, `galeria.html`, `contacto.html` | Páginas del sitio |
 | `data/contenido.json` | Textos, botones, cifras e imágenes de todas las páginas |
 | `data/indicadores.json` | Tarjetas, series de los gráficos y tabla de datos económicos |
 | `assets/` | Estilos, scripts e imágenes (`assets/subidas/` guarda lo que se sube desde el panel) |

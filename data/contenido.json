@@ -10,24 +10,60 @@
       "sede": "📍 Sede Principal: Yopal, Casanare"
     },
     "menu": [
-      { "texto": "Inicio", "enlace": "index.html" },
-      { "texto": "Datos Económicos", "enlace": "datos.html" },
-      { "texto": "Investigaciones", "enlace": "investigaciones.html" },
-      { "texto": "Galería", "enlace": "galeria.html" },
-      { "texto": "Comunidad", "enlace": "comunidad.html" },
-      { "texto": "Noticias", "enlace": "noticias.html" },
-      { "texto": "Contacto", "enlace": "contacto.html" }
+      {
+        "texto": "Inicio",
+        "enlace": "index.html"
+      },
+      {
+        "texto": "Datos Económicos",
+        "enlace": "datos.html"
+      },
+      {
+        "texto": "Investigaciones",
+        "enlace": "investigaciones.html"
+      },
+      {
+        "texto": "Galería",
+        "enlace": "galeria.html"
+      },
+      {
+        "texto": "Comunidad",
+        "enlace": "comunidad.html"
+      },
+      {
+        "texto": "Noticias",
+        "enlace": "noticias.html"
+      },
+      {
+        "texto": "Contacto",
+        "enlace": "contacto.html"
+      }
     ],
     "pie": {
       "nombre": "Programa de Economía",
       "descripcion": "Universidad Internacional del Trópico Americano — Unitrópico.\nFacultad de Ciencias Económicas y Administrativas.\nYopal, Casanare, Colombia.",
       "navegacion_titulo": "Navegación",
       "navegacion": [
-        { "texto": "Inicio", "enlace": "index.html" },
-        { "texto": "Datos Económicos", "enlace": "datos.html" },
-        { "texto": "Investigaciones", "enlace": "investigaciones.html" },
-        { "texto": "Comunidad", "enlace": "comunidad.html" },
-        { "texto": "Noticias", "enlace": "noticias.html" }
+        {
+          "texto": "Inicio",
+          "enlace": "index.html"
+        },
+        {
+          "texto": "Datos Económicos",
+          "enlace": "datos.html"
+        },
+        {
+          "texto": "Investigaciones",
+          "enlace": "investigaciones.html"
+        },
+        {
+          "texto": "Comunidad",
+          "enlace": "comunidad.html"
+        },
+        {
+          "texto": "Noticias",
+          "enlace": "noticias.html"
+        }
       ],
       "fuentes_titulo": "Fuentes Homologadas",
       "fuentes": [
@@ -39,24 +75,41 @@
       "contacto_titulo": "Contacto Académico",
       "contacto_texto": "¿Interesado en pasantías o semilleros?",
       "correo": "economia@unitropico.edu.co",
-      "boton": { "texto": "Buzón de Propuestas", "enlace": "contacto.html#buzon" },
+      "boton": {
+        "texto": "Buzón de Propuestas",
+        "enlace": "contacto.html#buzon"
+      },
       "copyright": "© 2025 Programa de Economía — Unitrópico. Contenido de demostración.",
       "nota": "Diseño institucional estático, ligero y modular."
     }
   },
-
   "inicio": {
     "hero": {
       "etiqueta": "Facultad de Ciencias Económicas",
       "titulo": "Pensamiento económico con visión territorial y rigor científico",
       "texto": "Formamos economistas líderes en análisis econométrico, política pública y desarrollo productivo sostenible para Casanare y los Llanos Orientales.",
       "imagen_fondo": "",
-      "boton_principal": { "texto": "Explorar Datos Regionales", "enlace": "datos.html" },
-      "boton_secundario": { "texto": "Estudios e Investigaciones", "enlace": "investigaciones.html" },
+      "boton_principal": {
+        "texto": "Explorar Datos Regionales",
+        "enlace": "datos.html"
+      },
+      "boton_secundario": {
+        "texto": "Estudios e Investigaciones",
+        "enlace": "investigaciones.html"
+      },
       "cifras": [
-        { "valor": "19", "etiqueta": "Municipios en monitoreo" },
-        { "valor": "+140", "etiqueta": "Estudios y working papers" },
-        { "valor": "3", "etiqueta": "Semilleros activos" }
+        {
+          "valor": "19",
+          "etiqueta": "Municipios en monitoreo"
+        },
+        {
+          "valor": "+140",
+          "etiqueta": "Estudios y working papers"
+        },
+        {
+          "valor": "3",
+          "etiqueta": "Semilleros activos"
+        }
       ],
       "grafico": {
         "etiqueta": "Observatorio Territorial",
@@ -64,7 +117,10 @@
         "periodo": "2020-2024",
         "nota": "Tendencia del PIB de Casanare vs. Promedio Nacional (dato de demostración).",
         "fuente": "DANE / Cuentas Regionales",
-        "enlace": { "texto": "Ver panel completo →", "enlace": "datos.html" }
+        "enlace": {
+          "texto": "Ver panel completo →",
+          "enlace": "datos.html"
+        }
       }
     },
     "ejes": {
@@ -109,27 +165,40 @@
       "vision": "Ser referente en investigación económica y análisis territorial de los Llanos Orientales, consolidando sinergias entre la academia, el sector productivo y las instituciones públicas.",
       "lineas_titulo": "Líneas de Investigación Activas",
       "lineas": [
-        { "titulo": "Desarrollo Territorial y Finanzas Públicas", "texto": "regalías, catastro y descentralización fiscal." },
-        { "titulo": "Economía Agrícola y Bioeconomía", "texto": "cadenas de valor del arroz y transición energética." },
-        { "titulo": "Mercado Laboral y Demografía", "texto": "empleo informal y productividad regional." }
+        {
+          "titulo": "Desarrollo Territorial y Finanzas Públicas",
+          "texto": "regalías, catastro y descentralización fiscal."
+        },
+        {
+          "titulo": "Economía Agrícola y Bioeconomía",
+          "texto": "cadenas de valor del arroz y transición energética."
+        },
+        {
+          "titulo": "Mercado Laboral y Demografía",
+          "texto": "empleo informal y productividad regional."
+        }
       ],
-      "boton": { "texto": "Postular propuesta de investigación", "enlace": "contacto.html#propuesta" }
+      "boton": {
+        "texto": "Postular propuesta de investigación",
+        "enlace": "contacto.html#propuesta"
+      }
     }
   },
-
   "datos": {
     "hero": {
       "etiqueta": "División de Investigación Económica · Observatorio de Coyuntura",
       "titulo": "Observatorio Económico Regional",
       "texto": "Monitoreo estadístico continuo de tendencias macroeconómicas y series de tiempo de Casanare y la Orinoquía, armonizadas por el Programa de Economía.",
-      "boton": { "texto": "⭳ Descargar Informe Ejecutivo", "enlace": "" }
+      "boton": {
+        "texto": "⭳ Descargar Informe Ejecutivo",
+        "enlace": ""
+      }
     },
     "nota_pib": "Metodología DANE, base 2015 encadenada de volumen. Dato 2024 provisional.",
     "tabla_titulo": "Matriz de Indicadores y Microdatos Regionales",
     "tabla_descripcion": "Conjunto de variables macroeconómicas con enlace a formatos abiertos.",
     "nota_fuentes": "Fuentes: Departamento Administrativo Nacional de Estadística (DANE), Banco de la República, Departamento Nacional de Planeación (TerriData). Cifras de demostración con fines de maquetación."
   },
-
   "contacto": {
     "hero": {
       "etiqueta": "ATENCIÓN ACADÉMICA",
@@ -143,8 +212,19 @@
       "whatsapp": "",
       "horario": "",
       "tiempoRespuesta": "3 días hábiles",
-      "redes": { "facebook": "", "instagram": "", "linkedin": "", "youtube": "", "x": "" },
-      "responsables": { "direccion": "", "investigacion": "", "practicas": "", "secretaria": "" }
+      "redes": {
+        "facebook": "",
+        "instagram": "",
+        "linkedin": "",
+        "youtube": "",
+        "x": ""
+      },
+      "responsables": {
+        "direccion": "",
+        "investigacion": "",
+        "practicas": "",
+        "secretaria": ""
+      }
     },
     "faq": [
       {
@@ -170,6 +250,210 @@
       {
         "pregunta": "¿Qué hacen con mis datos personales?",
         "respuesta": "Los usamos solo para atender tu solicitud, conforme a la Ley 1581 de 2012 y a la política de tratamiento de datos de la universidad. No los publicamos ni los compartimos con terceros."
+      }
+    ]
+  },
+  "noticias": {
+    "hero": {
+      "etiqueta": "SALA DE PRENSA",
+      "titulo": "Noticias y Actualidad",
+      "texto": "Logros, convocatorias, eventos y publicaciones del Programa de Economía.",
+      "aviso": "Estas noticias son de ejemplo. Reemplázalas desde el panel de contenido."
+    },
+    "items": [
+      {
+        "titulo": "Estudiantes presentan avances de su estudio sobre informalidad laboral en Yopal",
+        "fecha": "2026-10-02",
+        "categoria": "Investigación",
+        "destacada": true,
+        "imagen": "assets/img/ejemplos/ejemplo-1.jpg",
+        "pie": "Imagen de ejemplo.",
+        "resumen": "El semillero de Mercado Laboral y Demografía compartió los primeros resultados de su análisis con microdatos de la GEIH.",
+        "cuerpo": "El semillero de Mercado Laboral y Demografía presentó los avances de su estudio sobre informalidad laboral en Yopal, construido con microdatos de la Gran Encuesta Integrada de Hogares.\n\nDurante la sesión, los estudiantes explicaron la metodología, las preguntas que guían el trabajo y los próximos pasos antes de publicar el documento final.\n\nEste texto es de **ejemplo**: edítalo o borra esta noticia desde el panel de contenido.",
+        "boton": {
+          "texto": "Ver publicaciones del programa",
+          "enlace": "investigaciones.html"
+        }
+      },
+      {
+        "titulo": "Abierta la convocatoria de semilleros de investigación",
+        "fecha": "2026-09-28",
+        "categoria": "Convocatorias",
+        "destacada": false,
+        "imagen": "",
+        "pie": "",
+        "resumen": "Estudiantes de todos los semestres pueden postularse a los semilleros activos del programa.",
+        "cuerpo": "Los semilleros del programa reciben nuevos integrantes. Para postularte, escríbenos desde el [formulario de contacto](contacto.html#general) con el tema «Semilleros de investigación».\n\nEste texto es de **ejemplo**.",
+        "boton": {
+          "texto": "Escribir al programa",
+          "enlace": "contacto.html#general"
+        }
+      },
+      {
+        "titulo": "Coloquio sobre regalías y finanzas territoriales",
+        "fecha": "2026-09-15",
+        "categoria": "Eventos",
+        "destacada": false,
+        "imagen": "assets/img/ejemplos/ejemplo-3.jpg",
+        "pie": "Imagen de ejemplo.",
+        "resumen": "Docentes y estudiantes conversaron sobre el uso de las regalías y la planeación fiscal de los municipios.",
+        "cuerpo": "El coloquio reunió a docentes y estudiantes para discutir el papel de las regalías en el desarrollo de los municipios de Casanare.\n\nEste texto es de **ejemplo**.",
+        "boton": {
+          "texto": "",
+          "enlace": ""
+        }
+      },
+      {
+        "titulo": "Nuevo boletín del Observatorio Económico Regional",
+        "fecha": "2026-08-30",
+        "categoria": "Investigación",
+        "destacada": false,
+        "imagen": "",
+        "pie": "",
+        "resumen": "El boletín reúne las cifras más recientes de crecimiento, empleo e inflación del departamento.",
+        "cuerpo": "El Observatorio actualizó sus tableros con las cifras más recientes. Puedes consultarlas en la página de [datos económicos](datos.html).\n\nEste texto es de **ejemplo**.",
+        "boton": {
+          "texto": "Ver datos económicos",
+          "enlace": "datos.html"
+        }
+      }
+    ],
+    "convocatorias": [
+      {
+        "titulo": "Semilleros de investigación 2027-I",
+        "cierre": "2026-11-15",
+        "enlace": "contacto.html#general"
+      },
+      {
+        "titulo": "Propuestas de investigación",
+        "cierre": "2026-12-04",
+        "enlace": "contacto.html#propuesta"
+      }
+    ]
+  },
+  "investigaciones": {
+    "hero": {
+      "etiqueta": "REPOSITORIO CIENTÍFICO · PRODUCCIÓN ACADÉMICA",
+      "titulo": "Investigaciones y Publicaciones",
+      "texto": "Working papers, artículos y tesis del Programa de Economía sobre el desarrollo económico de Casanare y la Orinoquía.",
+      "aviso": "Estas publicaciones son de ejemplo. Reemplázalas desde el panel de contenido."
+    },
+    "lineas": [
+      {
+        "nombre": "Desarrollo Territorial y Finanzas Públicas",
+        "descripcion": "Regalías, catastro y descentralización fiscal."
+      },
+      {
+        "nombre": "Economía Agrícola y Bioeconomía",
+        "descripcion": "Cadenas de valor del arroz y transición energética."
+      },
+      {
+        "nombre": "Mercado Laboral y Demografía",
+        "descripcion": "Empleo informal y productividad regional."
+      }
+    ],
+    "publicaciones": [
+      {
+        "titulo": "Dependencia petrolera y volatilidad fiscal en Casanare, 2012–2024",
+        "tipo": "Working paper",
+        "anio": "2026",
+        "autores": "Autora de ejemplo; Autor de ejemplo",
+        "linea": "Desarrollo Territorial y Finanzas Públicas",
+        "destacada": true,
+        "resumen": "Documento de ejemplo. Analiza cómo los cambios en los ingresos petroleros se trasladan a las finanzas del departamento y de sus municipios.",
+        "pdf": "",
+        "enlace": ""
+      },
+      {
+        "titulo": "Cadena de valor del arroz en los Llanos: productividad y precios al productor",
+        "tipo": "Artículo",
+        "anio": "2025",
+        "autores": "Autor de ejemplo",
+        "linea": "Economía Agrícola y Bioeconomía",
+        "destacada": false,
+        "resumen": "Documento de ejemplo. Revisa los costos, la productividad y la formación de precios en la cadena arrocera de la región.",
+        "pdf": "",
+        "enlace": ""
+      },
+      {
+        "titulo": "Informalidad laboral en Yopal: evidencia de la GEIH",
+        "tipo": "Tesis de grado",
+        "anio": "2025",
+        "autores": "Estudiante de ejemplo",
+        "linea": "Mercado Laboral y Demografía",
+        "destacada": false,
+        "resumen": "Documento de ejemplo. Estima la incidencia de la informalidad y sus diferencias por edad, sexo y nivel educativo.",
+        "pdf": "",
+        "enlace": ""
+      },
+      {
+        "titulo": "Regalías y convergencia municipal en la Orinoquía",
+        "tipo": "Boletín",
+        "anio": "2024",
+        "autores": "Observatorio Económico Regional",
+        "linea": "Desarrollo Territorial y Finanzas Públicas",
+        "destacada": false,
+        "resumen": "Documento de ejemplo. Compara la evolución de indicadores municipales antes y después del Sistema General de Regalías.",
+        "pdf": "",
+        "enlace": ""
+      }
+    ]
+  },
+  "galeria": {
+    "hero": {
+      "etiqueta": "MEMORIA INSTITUCIONAL",
+      "titulo": "Galería de Eventos",
+      "texto": "Registro fotográfico de coloquios, simposios, semilleros y salidas de campo por el territorio llanero.",
+      "aviso": "Los álbumes y las fotos son de ejemplo. Reemplázalos desde el panel de contenido."
+    },
+    "albumes": [
+      {
+        "titulo": "Salida de campo a la cadena arrocera",
+        "fecha": "2026-09-12",
+        "lugar": "Aguazul, Casanare",
+        "categoria": "Salidas de campo",
+        "descripcion": "Álbum de ejemplo. Recorrido de estudiantes por fincas y molinos para conocer la cadena productiva del arroz.",
+        "portada": "",
+        "fotos": [
+          {
+            "imagen": "assets/img/ejemplos/ejemplo-1.jpg",
+            "pie": "Imagen de ejemplo."
+          },
+          {
+            "imagen": "assets/img/ejemplos/ejemplo-2.jpg",
+            "pie": "Imagen de ejemplo."
+          },
+          {
+            "imagen": "assets/img/ejemplos/ejemplo-4.jpg",
+            "pie": "Imagen de ejemplo."
+          },
+          {
+            "imagen": "assets/img/ejemplos/ejemplo-3.jpg",
+            "pie": "Imagen de ejemplo."
+          }
+        ]
+      },
+      {
+        "titulo": "Coloquio de finanzas territoriales",
+        "fecha": "2026-08-22",
+        "lugar": "Yopal, Casanare",
+        "categoria": "Coloquios y simposios",
+        "descripcion": "Álbum de ejemplo. Jornada académica sobre regalías, presupuesto y planeación municipal.",
+        "portada": "assets/img/ejemplos/ejemplo-5.jpg",
+        "fotos": [
+          {
+            "imagen": "assets/img/ejemplos/ejemplo-5.jpg",
+            "pie": "Imagen de ejemplo."
+          },
+          {
+            "imagen": "assets/img/ejemplos/ejemplo-6.jpg",
+            "pie": "Imagen de ejemplo."
+          },
+          {
+            "imagen": "assets/img/ejemplos/ejemplo-2.jpg",
+            "pie": "Imagen de ejemplo."
+          }
+        ]
       }
     ]
   }

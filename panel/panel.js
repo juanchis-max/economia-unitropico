@@ -36,7 +36,8 @@
     dispositivo: 'escritorio',
     existe: {},            // página → true/false (si responde en el sitio)
     shas: {},              // archivo → sha en GitHub al conectar
-    conectado: false
+    conectado: false,
+    abiertos: new Set()    // elementos de listas plegables que están abiertos
   };
 
   const $ = (s, r = document) => r.querySelector(s);
@@ -278,7 +279,18 @@
       const input = $('#selector-archivo');
       input.value = '';
       input.accept = aceptar;
+      input.multiple = false;
       input.onchange = () => resolver(input.files[0] || null);
+      input.click();
+    });
+  }
+  function elegirArchivos(aceptar) {
+    return new Promise((resolver) => {
+      const input = $('#selector-archivo');
+      input.value = '';
+      input.accept = aceptar;
+      input.multiple = true;
+      input.onchange = () => { const lista = Array.from(input.files || []); input.multiple = false; resolver(lista); };
       input.click();
     });
   }
@@ -321,9 +333,13 @@
     }
   }
 
-  async function subir({ imagen = false, maxLado = 1600 } = {}) {
-    const archivo = await elegirArchivo(imagen ? 'image/jpeg,image/png,image/webp,image/gif,image/svg+xml' : '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv,.zip,image/*');
+  async function subir(opciones = {}) {
+    const archivo = await elegirArchivo(opciones.imagen ? 'image/jpeg,image/png,image/webp,image/gif,image/svg+xml' : '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv,.zip,image/*');
     if (!archivo) return null;
+    return procesarArchivo(archivo, opciones);
+  }
+
+  async function procesarArchivo(archivo, { imagen = false, maxLado = 1600, silencioso = false } = {}) {
     if (archivo.size > MAX_ARCHIVO_MB * 1048576) {
       aviso(`El archivo pesa ${tamanoLegible(archivo.size)}. El máximo es ${MAX_ARCHIVO_MB} MB.`, 'alerta');
       return null;
@@ -337,9 +353,9 @@
       try {
         const o = await optimizarImagen(archivo, maxLado);
         blob = o.blob; ext = o.ext; tipo = o.tipo;
-        if (blob.size < archivo.size) aviso(`Imagen optimizada: ${tamanoLegible(archivo.size)} → ${tamanoLegible(blob.size)}.`, 'exito');
+        if (blob.size < archivo.size && !silencioso) aviso(`Imagen optimizada: ${tamanoLegible(archivo.size)} → ${tamanoLegible(blob.size)}.`, 'exito');
       } catch (e) {
-        aviso('No pude procesar esa imagen. Prueba con un JPG o PNG.', 'alerta');
+        aviso(`No pude procesar ${archivo.name}. Prueba con un JPG o PNG.`, 'alerta');
         return null;
       }
     }
@@ -391,7 +407,7 @@
     const leer = () => obtener(E.borrador[ctx.archivo], ruta);
     const escribir = (v) => { asignar(E.borrador[ctx.archivo], ruta, v); alCambiar(); };
 
-    const esCompuesto = ['boton', 'lista', 'serie', 'imagen'].includes(def.tipo);
+    const esCompuesto = ['boton', 'lista', 'serie', 'imagen', 'casilla'].includes(def.tipo);
     const cabecera = el('div', { class: 'p-campo-cabecera' },
       esCompuesto ? el('span', { class: 'p-etiqueta', id: id + '-et', text: def.etiqueta }) : el('label', { for: id, text: def.etiqueta }));
     if (ctx.indice !== undefined) {
@@ -418,6 +434,11 @@
           ? el('textarea', { id, rows: Math.min(8, Math.max(2, Math.ceil(String(leer() || '').length / 70))) })
           : el('input', { id, type: def.tipo === 'correo' ? 'email' : def.tipo === 'telefono' ? 'tel' : 'text', placeholder: def.placeholder, inputmode: def.tipo === 'telefono' ? 'tel' : undefined });
         control.value = leer() == null ? '' : leer();
+        if (def.sugerencias) {
+          const opciones = [...new Set((def.sugerencias(E.borrador) || []).filter(Boolean))];
+          control.setAttribute('list', id + '-dl');
+          nodo.append(el('datalist', { id: id + '-dl' }, opciones.map((v) => el('option', { value: v }))));
+        }
         if (pieAyuda) control.setAttribute('aria-describedby', id + '-ay');
         if (pieAyuda) pieAyuda.id = id + '-ay';
         let contador = null;
@@ -450,6 +471,22 @@
           if (ok) escribir(n);
         });
         nodo.append(control, error);
+        break;
+      }
+      case 'fecha': {
+        const control = el('input', { id, type: 'date' });
+        control.value = leer() || '';
+        const guardarFecha = () => escribir(control.value);
+        control.addEventListener('input', guardarFecha);
+        control.addEventListener('change', guardarFecha);
+        nodo.append(control);
+        break;
+      }
+      case 'casilla': {
+        const control = el('input', { id: id + '-c', type: 'checkbox' });
+        control.checked = !!leer();
+        control.addEventListener('change', () => escribir(control.checked));
+        nodo.append(el('label', { class: 'p-casilla', for: id + '-c' }, control, def.texto || def.etiqueta));
         break;
       }
       case 'selector': {
@@ -564,7 +601,25 @@
     if (typeof item === 'string') return item || `Elemento ${i + 1}`;
     if (def.item === 'boton') return (item && item.texto) || `Botón ${i + 1}`;
     const v = item && def.tituloItem ? item[def.tituloItem] : '';
-    return v ? String(v) : `Elemento ${i + 1}`;
+    return v ? String(v) : `${def.nombreItem || 'Elemento'} ${i + 1}`;
+  }
+  const MESES_CORTOS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  const fechaCorta = (iso) => {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
+    return m ? `${Number(m[3])} ${MESES_CORTOS[Number(m[2]) - 1]} ${m[1]}` : String(iso || '');
+  };
+  const miniaturaItem = (def, item) => (!item || !def.miniaturaItem ? '' : typeof def.miniaturaItem === 'function' ? def.miniaturaItem(item) : item[def.miniaturaItem]);
+
+  // Mantiene abiertos los elementos correctos al mover, agregar o quitar
+  function reindexarAbiertos(ruta, mapa) {
+    const nuevos = new Set();
+    E.abiertos.forEach((k) => {
+      if (!k.startsWith(ruta + '.')) { nuevos.add(k); return; }
+      const [idx, ...cola] = k.slice(ruta.length + 1).split('.');
+      const ni = mapa(Number(idx));
+      if (ni >= 0) nuevos.add([ruta, ni, ...cola].join('.'));
+    });
+    E.abiertos = nuevos;
   }
 
   function crearControlLista(def, ruta, ctx, leer, escribir, id) {
@@ -572,16 +627,28 @@
     const lista = Array.isArray(leer()) ? leer() : [];
     const items = el('div', { class: 'p-lista-items' });
     const rehacer = (nueva) => { escribir(nueva); renderEditor({ conservarScroll: true }); };
+    const nuevoItem = () => (typeof def.nuevo === 'function' ? def.nuevo() : clonar(def.nuevo));
+    // Los botones viven dentro del <summary>: que no abran ni cierren el elemento
+    const accion = (fn) => (e) => { e.preventDefault(); e.stopPropagation(); fn(); };
 
     lista.forEach((item, i) => {
       const rutaItem = `${ruta}.${i}`;
+      const nombre = tituloItem(def, item, i);
       const acciones = el('div', { class: 'p-item-acciones' },
-        el('button', { type: 'button', class: 'p-icono-btn', title: 'Subir', 'aria-label': `Subir ${tituloItem(def, item, i)}`, disabled: i === 0,
-          onclick: () => { const n = clonar(lista); [n[i - 1], n[i]] = [n[i], n[i - 1]]; rehacer(n); } }, '↑'),
-        el('button', { type: 'button', class: 'p-icono-btn', title: 'Bajar', 'aria-label': `Bajar ${tituloItem(def, item, i)}`, disabled: i === lista.length - 1,
-          onclick: () => { const n = clonar(lista); [n[i + 1], n[i]] = [n[i], n[i + 1]]; rehacer(n); } }, '↓'),
-        el('button', { type: 'button', class: 'p-icono-btn quitar', title: 'Quitar', 'aria-label': `Quitar ${tituloItem(def, item, i)}`, disabled: lista.length <= (def.min || 0),
-          onclick: () => { const n = clonar(lista); n.splice(i, 1); rehacer(n); } }, '✕')
+        el('button', { type: 'button', class: 'p-icono-btn', title: 'Subir', 'aria-label': `Subir ${nombre}`, disabled: i === 0,
+          onclick: accion(() => { const n = clonar(lista); [n[i - 1], n[i]] = [n[i], n[i - 1]]; reindexarAbiertos(ruta, (k) => (k === i ? i - 1 : k === i - 1 ? i : k)); rehacer(n); }) }, '↑'),
+        el('button', { type: 'button', class: 'p-icono-btn', title: 'Bajar', 'aria-label': `Bajar ${nombre}`, disabled: i === lista.length - 1,
+          onclick: accion(() => { const n = clonar(lista); [n[i + 1], n[i]] = [n[i], n[i + 1]]; reindexarAbiertos(ruta, (k) => (k === i ? i + 1 : k === i + 1 ? i : k)); rehacer(n); }) }, '↓'),
+        el('button', { type: 'button', class: 'p-icono-btn quitar', title: 'Quitar', 'aria-label': `Quitar ${nombre}`, disabled: lista.length <= (def.min || 0),
+          onclick: accion(async () => {
+            if (def.plegable) {
+              const ok = await confirmar({ titulo: `¿Quitar «${recortar(nombre, 60)}»?`, texto: 'Se quita del borrador. El sitio no cambia hasta que publiques.', si: 'Quitar', peligro: true });
+              if (!ok) return;
+            }
+            const n = clonar(lista); n.splice(i, 1);
+            reindexarAbiertos(ruta, (k) => (k < i ? k : k === i ? -1 : k - 1));
+            rehacer(n);
+          }) }, '✕')
       );
 
       if (def.item === 'texto') {
@@ -600,20 +667,58 @@
       } else {
         const cuerpo = el('div', { class: 'p-item-cuerpo' });
         def.item.campos.forEach((sub) => cuerpo.append(crearCampo(sub, `${rutaItem}.${sub.clave}`, { archivo: ctx.archivo })));
-        items.append(el('div', { class: 'p-item' },
-          el('div', { class: 'p-item-cabecera' }, el('span', { class: 'p-item-numero', text: '#' + (i + 1) }), el('span', { class: 'p-item-titulo', text: tituloItem(def, item, i) }), acciones),
-          cuerpo));
+        const mini = miniaturaItem(def, item);
+        const subtitulo = def.subtituloItem && item ? item[def.subtituloItem] : '';
+        const cabecera = [
+          el('span', { class: 'p-item-numero', text: '#' + (i + 1) }),
+          mini ? el('img', { class: 'p-item-mini', src: srcVista(mini), alt: '' }) : null,
+          el('span', { class: 'p-item-titulo', text: nombre }),
+          subtitulo ? el('span', { class: 'p-item-sub', text: fechaCorta(subtitulo) }) : null,
+          acciones
+        ];
+        if (def.plegable) {
+          const det = el('details', { class: 'p-item', open: E.abiertos.has(rutaItem) }, el('summary', { class: 'p-item-cabecera' }, cabecera), cuerpo);
+          det.addEventListener('toggle', () => { if (det.open) E.abiertos.add(rutaItem); else E.abiertos.delete(rutaItem); });
+          items.append(det);
+        } else {
+          items.append(el('div', { class: 'p-item' }, el('div', { class: 'p-item-cabecera' }, cabecera), cuerpo));
+        }
       }
     });
-    if (!lista.length) items.append(el('p', { class: 'p-vacio', text: 'No hay elementos. Esta parte no se mostrará en la página.' }));
+    if (!lista.length) items.append(el('p', { class: 'p-vacio', text: def.textoVacio || 'No hay elementos. Esta parte no se mostrará en la página.' }));
 
     const pie = el('div', { class: 'p-lista-pie' });
     const lleno = def.max && lista.length >= def.max;
     pie.append(el('button', {
       type: 'button', class: 'p-btn p-btn-borde p-btn-chico', disabled: lleno,
-      text: lleno ? `Máximo ${def.max}` : '+ Agregar',
-      onclick: () => rehacer([...clonar(lista), clonar(def.nuevo)])
+      text: lleno ? `Máximo ${def.max}` : (def.textoAgregar || '+ Agregar'),
+      onclick: () => {
+        const n = clonar(lista);
+        if (def.agregarArriba) { reindexarAbiertos(ruta, (k) => k + 1); n.unshift(nuevoItem()); E.abiertos.add(`${ruta}.0`); }
+        else { n.push(nuevoItem()); E.abiertos.add(`${ruta}.${n.length - 1}`); }
+        rehacer(n);
+      }
     }));
+    if (def.subirVarias && !lleno) {
+      pie.append(el('button', {
+        type: 'button', class: 'p-btn p-btn-oscuro p-btn-chico', text: def.subirVarias.texto || 'Subir varias fotos',
+        onclick: async () => {
+          const archivos = await elegirArchivos('image/jpeg,image/png,image/webp,image/gif');
+          if (!archivos.length) return;
+          const libres = def.max ? Math.max(0, def.max - lista.length) : archivos.length;
+          const tomar = archivos.slice(0, libres);
+          if (tomar.length < archivos.length) aviso(`Solo caben ${libres} fotos más en esta lista.`, 'alerta');
+          aviso(`Procesando ${tomar.length} foto${tomar.length === 1 ? '' : 's'}…`, '', 2500);
+          const n = clonar(lista);
+          for (const f of tomar) {
+            const r = await procesarArchivo(f, { imagen: true, maxLado: def.subirVarias.maxLado || 1600, silencioso: true });
+            if (r) n.push(Object.assign(nuevoItem() || {}, { [def.subirVarias.clave]: r }));
+          }
+          const agregadas = n.length - lista.length;
+          if (agregadas) { aviso(`Se agregaron ${agregadas} foto${agregadas === 1 ? '' : 's'}.`, 'exito'); rehacer(n); }
+        }
+      }));
+    }
     if (def.suma) {
       const suma = lista.reduce((s, it) => s + (Number(it && it[def.suma.clave]) || 0), 0);
       const redondeada = Math.round(suma * 100) / 100;

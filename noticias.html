@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Noticias | Programa de Economía — Unitrópico</title>
+<meta name="description" content="Noticias, convocatorias y eventos del Programa de Economía de Unitrópico." />
+<script>document.documentElement.classList.add('cc-cargando');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/custom.css" />
+</head>
+<body data-pagina="noticias">
+
+<div class="topbar">
+  <div class="contenedor">
+    <span><strong data-c="general.franja.marca">Unitrópico</strong> · <span data-c="general.franja.texto">Facultad de Ciencias Económicas y Administrativas</span></span>
+    <span data-c="general.franja.sede">📍 Sede Principal: Yopal, Casanare</span>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="contenedor">
+    <a href="index.html" class="marca">
+      <div class="marca-icono"><img src="assets/img/logo-unitropico.jpg" alt="Logo Unitrópico" data-c-src="general.logo" data-c-alt="general.logo_alt"></div>
+      <div class="marca-texto">
+        <span class="nombre" data-c="general.nombre">Programa de Economía</span>
+        <span class="subnombre" data-c="general.subnombre">UNITRÓPICO</span>
+      </div>
+    </a>
+    <nav class="nav-principal" aria-label="Menú principal" data-c-menu>
+      <a href="index.html">Inicio</a>
+      <a href="datos.html">Datos Económicos</a>
+      <a href="investigaciones.html">Investigaciones</a>
+      <a href="galeria.html">Galería</a>
+      <a href="comunidad.html">Comunidad</a>
+      <a href="noticias.html" class="activo" aria-current="page">Noticias</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+    <button id="btn-menu-movil" class="btn-menu-movil" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-movil">
+      <svg width="26" height="26" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+  <nav id="nav-movil" class="nav-movil" aria-label="Menú principal" data-c-menu>
+    <a href="index.html">Inicio</a>
+    <a href="datos.html">Datos Económicos</a>
+    <a href="investigaciones.html">Investigaciones</a>
+    <a href="galeria.html">Galería</a>
+    <a href="comunidad.html">Comunidad</a>
+    <a href="noticias.html" class="activo" aria-current="page">Noticias</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero-interno" id="cabecera">
+    <div class="contenedor">
+      <div class="migas"><a href="index.html">Inicio</a> / Noticias</div>
+      <div class="hero-flex">
+        <div>
+          <span class="etiqueta" data-c="noticias.hero.etiqueta">SALA DE PRENSA</span>
+          <h1 data-c="noticias.hero.titulo">Noticias y Actualidad</h1>
+          <p class="intro" data-c="noticias.hero.texto">Logros, convocatorias, eventos y publicaciones del Programa de Economía.</p>
+          <p class="aviso aviso-ejemplo" data-c="noticias.hero.aviso" data-c-ocultar-vacio>Estas noticias son de ejemplo. Reemplázalas desde el panel de contenido.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="seccion" style="padding-top:32px;">
+    <div class="contenedor" id="noticias-app">
+      <p class="texto-tenue">Cargando noticias…</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="contenedor">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-marca">
+          <div class="marca-icono"><img src="assets/img/logo-unitropico.jpg" alt="Logo Unitrópico" data-c-src="general.logo" data-c-alt="general.logo_alt"></div>
+          <span data-c="general.pie.nombre">Programa de Economía</span>
+        </div>
+        <p class="footer-descripcion" data-c="general.pie.descripcion">Universidad Internacional del Trópico Americano — Unitrópico.<br>Facultad de Ciencias Económicas y Administrativas.<br>Yopal, Casanare, Colombia.</p>
+      </div>
+      <div>
+        <h4 data-c="general.pie.navegacion_titulo">Navegación</h4>
+        <ul data-c-lista="general.pie.navegacion">
+          <template><li><a data-ci-boton=""></a></li></template>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="datos.html">Datos Económicos</a></li>
+          <li><a href="investigaciones.html">Investigaciones</a></li>
+          <li><a href="comunidad.html">Comunidad</a></li>
+          <li><a href="noticias.html">Noticias</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-c="general.pie.fuentes_titulo">Fuentes Homologadas</h4>
+        <ul data-c-lista="general.pie.fuentes">
+          <template><li data-ci=""></li></template>
+          <li>DANE - Cuentas Departamentales</li>
+          <li>Banco de la República</li>
+          <li>DNP - TerriData Casanare</li>
+          <li>Gobernación de Casanare</li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-c="general.pie.contacto_titulo">Contacto Académico</h4>
+        <p class="footer-descripcion" data-c="general.pie.contacto_texto">¿Interesado en pasantías o semilleros?</p>
+        <a href="mailto:economia@unitropico.edu.co" class="texto-dorado footer-correo" data-c-correo="general.pie.correo">economia@unitropico.edu.co</a>
+        <a href="contacto.html#buzon" class="btn btn-secundario btn-sm btn-claro" data-c-boton="general.pie.boton">Buzón de Propuestas</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-c="general.pie.copyright">© 2025 Programa de Economía — Unitrópico. Contenido de demostración.</p>
+      <p data-c="general.pie.nota">Diseño institucional estático, ligero y modular.</p>
+      <p><a href="panel/" class="footer-admin">Administrar contenido</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/contenido.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/noticias.js"></script>
+</body>
+</html>

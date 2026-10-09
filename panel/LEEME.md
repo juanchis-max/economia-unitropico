@@ -1,6 +1,6 @@
 # Panel de contenido
 
-Abre `panel/` desde el sitio publicado (por ejemplo `https://tu-sitio/panel/`) o desde un servidor local.
+Abre `panel/` desde el sitio publicado (por ejemplo `https://tu-sitio/panel/`, también enlazado como «Administrar contenido» en el pie de cada página) o desde un servidor local.
 Con doble clic sobre el archivo no funciona, porque el navegador bloquea la lectura de los datos.
 
 ## Qué edita
@@ -12,6 +12,9 @@ Con doble clic sobre el archivo no funciona, porque el navegador bloquea la lect
 | Datos económicos         | `data/contenido.json`   | `datos.html` (textos)         |
 | Indicadores y gráficos   | `data/indicadores.json` | `datos.html` y gráfico de la portada |
 | Contacto                 | `data/contenido.json`   | `contacto.html`               |
+| Noticias                 | `data/contenido.json`   | `noticias.html` (cada noticia tiene su página: `noticias.html?n=…`) |
+| Investigaciones          | `data/contenido.json`   | `investigaciones.html`        |
+| Galería                  | `data/contenido.json`   | `galeria.html` (cada álbum: `galeria.html?album=…`) |
 
 Las imágenes y documentos subidos van a `assets/subidas/`. Las imágenes se reducen y comprimen al subirlas.
 

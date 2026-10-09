@@ -248,12 +248,35 @@
     });
   }
 
+  var MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
   window.CC = {
     borrador: BORRADOR,
     listo: listo,
     contenido: function () { return listo.then(function () { return estado.contenido; }); },
     indicadores: function () { return listo.then(function () { return estado.indicadores; }); },
     escapar: escapar,
-    formatear: formatear
+    formatear: formatear,
+    urlSegura: urlSegura,
+    // Dirección de una imagen o archivo (en la vista previa incluye los recién subidos)
+    archivo: function (ruta) { return ruta ? rutaArchivo(ruta) : ''; },
+    // "Coloquio de finanzas" → "coloquio-de-finanzas"
+    slug: function (s) {
+      return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
+    },
+    // "2026-10-02" → "2 de octubre de 2026" (corto: "2 oct 2026")
+    fecha: function (iso, corto) {
+      var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ''));
+      if (!m) return String(iso || '');
+      var mes = MESES[Number(m[2]) - 1] || '';
+      return corto ? Number(m[3]) + ' ' + mes.slice(0, 3) + ' ' + m[1] : Number(m[3]) + ' de ' + mes + ' de ' + m[1];
+    },
+    // Enlace interno que conserva el modo vista previa del panel
+    enlace: function (url) {
+      if (!BORRADOR || /^(https?:|mailto:|tel:|#)/i.test(url)) return url;
+      var partes = String(url).split('#');
+      return partes[0] + (partes[0].indexOf('?') === -1 ? '?' : '&') + 'borrador=1' + (partes[1] ? '#' + partes[1] : '');
+    }
   };
 })();

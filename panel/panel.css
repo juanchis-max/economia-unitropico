@@ -369,3 +369,23 @@ body.panel {
   .p-seccion-cabecera { flex-direction: column; }
   .p-cuerpo.con-vista .p-vista { top: 0; width: 100vw; }
 }
+
+/* ---------- Listas plegables (noticias, publicaciones, álbumes) ---------- */
+details.p-item > summary { list-style: none; cursor: pointer; }
+details.p-item > summary::-webkit-details-marker { display: none; }
+details.p-item > summary::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-right: 2px solid var(--marron-medio);
+  border-bottom: 2px solid var(--marron-medio);
+  transform: rotate(-45deg);
+  transition: transform 0.15s;
+  margin-right: 2px;
+}
+details.p-item[open] > summary::before { transform: rotate(45deg); }
+details.p-item:not([open]) > summary { border-bottom: none; border-radius: 8px; }
+details.p-item > summary:hover .p-item-titulo { color: var(--marron-oscuro); }
+.p-item-mini { width: 40px; height: 30px; border-radius: 4px; object-fit: cover; flex-shrink: 0; background: var(--marron-claro); }
+.p-item-sub { font-size: 0.74rem; color: var(--gris-medio); white-space: nowrap; }
