@@ -133,7 +133,7 @@
   </section>
 
   <!-- TABLA -->
-  <section class="seccion" style="padding-top:0;">
+  <section id="explorador-regional" tabindex="-1" class="seccion" style="padding-top:0;">
     <div class="contenedor">
       <div class="tarjeta" style="padding:24px;">
         <div class="seccion-cabecera">
@@ -145,6 +145,18 @@
             <a href="data/indicadores.json" download class="btn btn-secundario btn-sm">⭳ Descargar JSON</a>
           </div>
         </div>
+        <p class="texto-tenue">Datos de demostración. Los filtros se aplican a esta tabla; los gráficos muestran las series completas.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:end;margin-bottom:16px;">
+          <label style="flex:1;min-width:200px;">Buscar indicador, fuente o periodo
+            <input id="buscar-regional" type="search" placeholder="Ejemplo: PIB, arroz, 2024" style="display:block;width:100%;padding:10px;margin-top:6px;">
+          </label>
+          <label>Cobertura
+            <select id="cobertura-regional" style="display:block;max-width:100%;padding:10px;margin-top:6px;"><option value="">Todas las coberturas</option></select>
+          </label>
+          <button id="limpiar-regional" type="button" class="btn btn-secundario btn-sm">Limpiar filtros</button>
+          <button id="csv-regional" type="button" class="btn btn-primario btn-sm" disabled>Descargar resultados CSV</button>
+        </div>
+        <p id="estado-regional" role="status" aria-live="polite" class="texto-tenue">Cargando indicadores…</p>
         <div class="tabla-scroll">
           <table class="tabla-indicadores">
             <thead>
