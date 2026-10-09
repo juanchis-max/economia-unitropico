@@ -4,6 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
+<script>
+  // Si el panel se abre como /panel (sin barra final), sus archivos no cargan: se corrige la dirección.
+  if (!/\/$/.test(location.pathname) && !/\.html?$/.test(location.pathname)) {
+    location.replace(location.pathname + '/' + location.search + location.hash);
+  }
+</script>
 <title>Panel de contenido | Programa de Economía</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
