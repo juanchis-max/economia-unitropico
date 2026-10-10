@@ -21,7 +21,7 @@ const SHEET_URLS = {
   kpis: "",
 
   // Pestaña "PIB_Serie" — gráfico de línea PIB Casanare vs Nacional
-  pibSerie: "",
+  pibSerie: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR9kT5w5-_1HcKioHksP-1Ihg_uPhc1ndB2xvnF0G75h9cjJhdHw-DrDSL4LO_2_bcFY76VEQpWHFMa/pub?gid=4102&single=true&output=csv",
 
   // Pestaña "Desempleo" — gráfico de barras
   desempleo: "",
