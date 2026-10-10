@@ -12,46 +12,20 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!contenedorKpis && !cuerpoTabla) return; // no estamos en datos.html
 
   const esc = (s) => (window.CC ? CC.escapar(s == null ? '' : s) : String(s == null ? '' : s));
-  const enlaces = typeof SHEET_URLS !== 'undefined' ? SHEET_URLS : {};
-
-  // ---- Google Sheets (se descarga una sola vez por visita) ----
-  const cacheSheets = {};
-  function desdeSheets(clave) {
-    if (!(clave in cacheSheets)) {
-      const url = enlaces[clave];
-      cacheSheets[clave] = !url || typeof Papa === 'undefined'
-        ? Promise.resolve(null)
-        : new Promise((resolve) => {
-            Papa.parse(url, {
-              download: true, header: true, skipEmptyLines: true,
-              complete: (r) => resolve(r.data),
-              error: (err) => { console.warn(`Google Sheets (${clave}): se usa el JSON.`, err); resolve(null); }
-            });
-          });
-    }
-    return cacheSheets[clave];
-  }
 
   async function obtenerDatos() {
-    const respaldo = (window.CC ? await CC.indicadores() : null) || {};
-    const [fKpis, fPib, fDes, fSec, fTab] = await Promise.all(['kpis', 'pibSerie', 'desempleo', 'sectores', 'tabla'].map(desdeSheets));
+    const keys = ['kpis','pibSerie','desempleo','sectores','tabla'];
+    const results = await Promise.all(keys.map(key => EconData.read(key)));
+    const sources = Object.fromEntries(keys.map((key,i) => [key,results[i]]));
+    const pib = sources.pibSerie.rows, des = sources.desempleo.rows, sec = sources.sectores.rows;
     return {
-      respaldo,
-      kpis: fKpis ? fKpis.map((f) => ({
-        titulo: f.titulo, subtitulo: f.subtitulo, valor: f.valor, variacion: f.variacion,
-        tendencia: (f.tendencia || '').trim().toLowerCase(), periodo: f.periodo,
-        icono: (f.icono || 'grafico').trim().toLowerCase()
-      })) : (respaldo.kpis || []),
-      pib: fPib ? { anios: fPib.map((f) => f.anio), casanare: fPib.map((f) => parseFloat(f.casanare)), nacional: fPib.map((f) => parseFloat(f.nacional)) }
-        : (respaldo.pib_serie || { anios: [], casanare: [], nacional: [] }),
-      desempleo: fDes ? { trimestres: fDes.map((f) => f.trimestre), valores: fDes.map((f) => parseFloat(f.valor)) }
-        : (respaldo.desempleo_trimestral || { trimestres: [], valores: [] }),
-      sectores: fSec ? fSec.map((f) => ({ nombre: f.nombre, valor: parseFloat(f.valor) }))
-        : ((respaldo.composicion_sectorial || {}).sectores || []),
-      tabla: fTab ? fTab.map((f) => ({
-        indicador: f.indicador, cobertura: f.cobertura, valor: f.valor, variacion: f.variacion,
-        tendencia: (f.tendencia || '').trim().toLowerCase(), fuente: f.fuente, periodo: f.periodo
-      })) : (respaldo.tabla_indicadores || [])
+      respaldo: {},
+      sources,
+      kpis: sources.kpis.rows,
+      pib: {anios:pib.map(f=>f.anio),casanare:pib.map(f=>EconData.number(f.casanare)),nacional:pib.map(f=>EconData.number(f.nacional))},
+      desempleo: {trimestres:des.map(f=>f.trimestre),valores:des.map(f=>EconData.number(f.valor))},
+      sectores: sec.map(f=>({...f,valor:EconData.number(f.valor)})),
+      tabla: sources.tabla.rows
     };
   }
 
@@ -69,7 +43,17 @@ document.addEventListener('DOMContentLoaded', () => {
   let graficos = [];
 
   async function render() {
+    if (window.CC) await CC.listo;
     const d = await obtenerDatos();
+    Object.entries(d.sources).forEach(([key,result]) => {
+      EconData.source(document.querySelector('[data-sheet-status="' + key + '"]'), result);
+    });
+    document.querySelectorAll('[data-ind]').forEach(el => {
+      const key = el.dataset.ind;
+      if (key === 'pib_serie.descripcion') el.textContent = d.pib.anios.length ? 'Tasas de crecimiento real anual (%): ' + d.pib.anios[0] + '–' + d.pib.anios[d.pib.anios.length-1] : 'Serie pendiente de cifras aprobadas.';
+      if (key === 'desempleo_trimestral.descripcion') el.textContent = d.sources.desempleo.rows.length ? d.sources.desempleo.rows[0].territorio : 'Cobertura según la fuente oficial.';
+      if (key === 'composicion_sectorial.descripcion') el.textContent = d.sources.sectores.rows.length ? d.sources.sectores.rows[0].territorio + ' · ' + d.sources.sectores.rows[0].periodo : 'Participaciones del VAB (%).';
+    });
 
     // ---- Títulos de los gráficos (data-ind="ruta" en el HTML) ----
     document.querySelectorAll('[data-ind]').forEach((el) => {
@@ -99,22 +83,67 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('') || '<p class="texto-tenue">No hay indicadores para mostrar.</p>';
     }
 
-    // ---- Tabla ----
+    // ---- Explorador regional: filtra y exporta la misma tabla visible ----
     if (cuerpoTabla) {
-      cuerpoTabla.innerHTML = d.tabla.map((fila) => `
-        <tr>
-          <td><strong>${esc(fila.indicador)}</strong><div class="texto-tenue" style="font-size:0.75rem;">${esc(fila.cobertura)}</div></td>
-          <td>${esc(fila.valor)}</td>
-          <td class="${claseTendencia(fila.tendencia)}">${esc(fila.variacion)}</td>
-          <td class="texto-tenue">${esc(fila.fuente)}</td>
-          <td class="texto-tenue">${esc(fila.periodo)}</td>
-        </tr>
-      `).join('') || '<tr><td colspan="5" class="texto-tenue">No hay filas para mostrar.</td></tr>';
+      const buscar = document.getElementById('buscar-regional');
+      const cobertura = document.getElementById('cobertura-regional');
+      const estado = document.getElementById('estado-regional');
+      const csv = document.getElementById('csv-regional');
+      const normalizar = (v) => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      let visibles = [];
+      if (cobertura) {
+        const anterior = cobertura.value;
+        cobertura.replaceChildren(new Option('Todas las coberturas', ''));
+        [...new Set(d.tabla.map(f => f.cobertura).filter(Boolean))].sort().forEach(v => cobertura.add(new Option(v, v)));
+        if ([...cobertura.options].some(o => o.value === anterior)) cobertura.value = anterior;
+      }
+      function filtrar() {
+        const q = normalizar(buscar && buscar.value).trim();
+        visibles = d.tabla.filter(f => (!cobertura || !cobertura.value || f.cobertura === cobertura.value) &&
+          normalizar([f.indicador, f.cobertura, f.fuente, f.periodo].join(' ')).includes(q));
+        cuerpoTabla.innerHTML = visibles.map(fila => `
+          <tr>
+            <td><strong>${esc(fila.indicador)}</strong><div class="texto-tenue">${esc(fila.cobertura)}</div></td>
+            <td>${esc(fila.valor)}<div class="texto-tenue">${esc(fila.unidad)} · ${esc(fila.metodologia)}</div></td><td class="${claseTendencia(fila.tendencia)}">${esc(fila.variacion)}</td>
+            <td class="texto-tenue"><a href="${esc(fila.enlace_fuente)}" target="_blank" rel="noopener noreferrer">${esc(fila.fuente)}</a><div>Revisión: ${esc(fila.fecha_revision)}</div></td><td class="texto-tenue">${esc(fila.periodo)}</td>
+          </tr>`).join('') || '<tr><td colspan="5">No hay resultados. Prueba otra búsqueda o limpia los filtros.</td></tr>';
+        if (estado) estado.textContent = visibles.length + ' de ' + d.tabla.length + ' indicadores';
+        if (csv) csv.disabled = !visibles.length;
+      }
+      if (buscar) buscar.oninput = filtrar;
+      if (cobertura) cobertura.onchange = filtrar;
+      const limpiar = document.getElementById('limpiar-regional');
+      if (limpiar) limpiar.onclick = () => {
+        if (buscar) buscar.value = '';
+        if (cobertura) cobertura.value = '';
+        filtrar();
+        if (buscar) buscar.focus();
+      };
+      if (csv) csv.onclick = () => {
+        const columnas = ['indicador', 'cobertura', 'valor', 'variacion', 'fuente', 'periodo', 'unidad', 'metodologia', 'enlace_fuente', 'condicion_dato', 'fecha_revision'];
+        // Neutraliza fórmulas al abrir contenido editable en hojas de cálculo.
+        const celda = v => {
+          let s = String(v == null ? '' : v);
+          if (/^[=+@-]/.test(s.trimStart())) s = "'" + s;
+          return '"' + s.replace(/"/g, '""') + '"';
+        };
+        const filas = [columnas, ...visibles.map(f => columnas.map(k => f[k]))];
+        const url = URL.createObjectURL(new Blob(['\uFEFF' + filas.map(f => f.map(celda).join(';')).join('\r\n')], {type: 'text/csv;charset=utf-8'}));
+        const a = document.createElement('a');
+        a.href = url; a.download = 'indicadores-regionales.csv';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      };
+      filtrar();
     }
 
     // ---- Gráficos (si Chart.js no cargó, el resto de la página igual funciona) ----
     graficos.forEach((g) => g.destroy());
     graficos = [];
+    [['graficoPib', d.pib.anios], ['graficoDesempleo', d.desempleo.trimestres], ['graficoSectores', d.sectores]].forEach(([id,rows]) => {
+      const canvas = document.getElementById(id);
+      if (canvas) canvas.parentElement.hidden = !rows.length;
+    });
     if (typeof Chart === 'undefined') {
       console.warn('Chart.js no está disponible; se omiten los gráficos.');
       return;
@@ -123,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctxDesempleo = document.getElementById('graficoDesempleo');
     const ctxSectores = document.getElementById('graficoSectores');
 
-    if (ctxPib) {
+    if (ctxPib && d.pib.anios.length) {
       graficos.push(new Chart(ctxPib, {
         type: 'line',
         data: {
@@ -140,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }));
     }
-    if (ctxDesempleo) {
+    if (ctxDesempleo && d.desempleo.trimestres.length) {
       graficos.push(new Chart(ctxDesempleo, {
         type: 'bar',
         data: {
@@ -154,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }));
     }
-    if (ctxSectores) {
+    if (ctxSectores && d.sectores.length) {
       graficos.push(new Chart(ctxSectores, {
         type: 'doughnut',
         data: {
@@ -169,6 +198,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  const actualizar = document.getElementById('actualizar-cifras');
+  if (actualizar) actualizar.addEventListener('click', async () => {
+    actualizar.disabled = true;
+    actualizar.textContent = 'Consultando…';
+    EconData.clear();
+    try { await render(); }
+    finally { actualizar.disabled = false; actualizar.textContent = 'Actualizar cifras'; }
+  });
   render();
   // Vista previa del panel: volver a dibujar cuando cambie el borrador
   document.addEventListener('cc:actualizado', render);

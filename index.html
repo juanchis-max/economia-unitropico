@@ -64,7 +64,7 @@
           <h1 data-c="inicio.hero.titulo">Pensamiento económico con visión territorial y rigor científico</h1>
           <p class="portada-texto" data-c="inicio.hero.texto">Formamos economistas líderes en análisis econométrico, política pública y desarrollo productivo sostenible para Casanare y los Llanos Orientales.</p>
           <div class="portada-botones">
-            <a href="datos.html" class="btn btn-dorado" data-c-boton="inicio.hero.boton_principal">Explorar Datos Regionales</a>
+            <a href="datos.html#explorador-regional" class="btn btn-dorado" data-c-boton="inicio.hero.boton_principal">Explorar Datos Regionales</a>
             <a href="investigaciones.html" class="btn btn-secundario btn-claro" data-c-boton="inicio.hero.boton_secundario">Estudios e Investigaciones</a>
           </div>
           <div class="portada-cifras" data-c-lista="inicio.hero.cifras">
@@ -88,7 +88,7 @@
             <canvas id="heroChartPreview" aria-label="Gráfico del crecimiento del PIB de Casanare frente al promedio nacional" role="img"></canvas>
           </div>
           <div class="portada-grafico-pie">
-            <span class="texto-tenue">Fuente: <strong data-c="inicio.hero.grafico.fuente">DANE / Cuentas Regionales</strong></span>
+            <div id="fuente-pib-inicio" class="texto-tenue" role="status">Consultando cifras aprobadas…</div>
             <a href="datos.html" class="texto-dorado" data-c-boton="inicio.hero.grafico.enlace">Ver panel completo →</a>
           </div>
         </div>
@@ -227,6 +227,7 @@
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/contenido.js"></script>
+<script src="assets/js/sheets.js"></script>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/inicio.js"></script>
 </body>

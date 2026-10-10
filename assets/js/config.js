@@ -8,8 +8,11 @@
 // → elige la pestaña correspondiente → formato "CSV" → Copiar link.
 // El link debe terminar en algo como: .../pub?output=csv
 //
-// Si dejas un link vacío (""), esa parte de la página usará
-// automáticamente los datos de demostración como respaldo.
+// Si dejas un link vacío (""), la web mostrará un aviso.
+// No se sustituyen cifras oficiales por datos de demostración.
+// Hoja: https://docs.google.com/spreadsheets/d/156GU97B6XdenU7sFN1ocx24j_8ddOBfJCFKnN2Msso8/edit
+// Pestañas: KPIs (4101), PIB_Serie (4102), Desempleo (4103),
+// Sectores (4104), Tabla (4105). Publica cada pestaña como CSV.
 // =========================================================
 
 const SHEET_URLS = {
@@ -18,7 +21,7 @@ const SHEET_URLS = {
   kpis: "",
 
   // Pestaña "PIB_Serie" — gráfico de línea PIB Casanare vs Nacional
-  pibSerie: "",
+  pibSerie: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR9kT5w5-_1HcKioHksP-1Ihg_uPhc1ndB2xvnF0G75h9cjJhdHw-DrDSL4LO_2_bcFY76VEQpWHFMa/pub?gid=4102&single=true&output=csv",
 
   // Pestaña "Desempleo" — gráfico de barras
   desempleo: "",

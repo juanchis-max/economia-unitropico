@@ -82,6 +82,11 @@
     </div>
   </section>
 
+  <div class="contenedor" style="padding-top:24px;">
+    <button id="actualizar-cifras" class="btn btn-secundario btn-sm" type="button">Actualizar cifras</button>
+    <p class="texto-tenue">Cifras oficiales ingresadas y revisadas por el docente. La consulta a Google Sheets no verifica por sí sola su exactitud.</p>
+    <p data-sheet-status="kpis" role="status" aria-live="polite"></p>
+  </div>
   <!-- KPIs -->
   <section class="seccion" style="padding-top:32px; padding-bottom:20px;">
     <div class="contenedor">
@@ -102,6 +107,7 @@
             <p class="texto-tenue" style="font-size:0.85rem; margin-top:4px;" data-ind="pib_serie.descripcion">Serie histórica anual 2020–2024 (tasas de crecimiento real, en % anual).</p>
           </div>
         </div>
+        <p data-sheet-status="pibSerie" role="status" class="texto-tenue"></p>
         <div class="grafico-caja">
           <canvas id="graficoPib" role="img" aria-label="Gráfico de líneas del crecimiento del PIB de Casanare y del promedio nacional"></canvas>
         </div>
@@ -117,6 +123,7 @@
         <div class="tarjeta" style="padding:24px;">
           <h3 style="font-size:1.05rem; margin-bottom:4px;" data-ind="desempleo_trimestral.titulo">Desocupación Urbana por Trimestre</h3>
           <p class="texto-tenue" style="font-size:0.82rem; margin-bottom:14px;" data-ind="desempleo_trimestral.descripcion">Yopal A.M. durante las cuatro mediciones estacionales de 2024.</p>
+          <p data-sheet-status="desempleo" role="status" class="texto-tenue"></p>
           <div class="grafico-caja chico">
             <canvas id="graficoDesempleo" role="img" aria-label="Gráfico de barras de la desocupación por trimestre"></canvas>
           </div>
@@ -124,6 +131,7 @@
         <div class="tarjeta" style="padding:24px;">
           <h3 style="font-size:1.05rem; margin-bottom:4px;" data-ind="composicion_sectorial.titulo">Composición Sectorial del VAB</h3>
           <p class="texto-tenue" style="font-size:0.82rem; margin-bottom:14px;" data-ind="composicion_sectorial.descripcion">Distribución del Valor Agregado Bruto de Casanare.</p>
+          <p data-sheet-status="sectores" role="status" class="texto-tenue"></p>
           <div class="grafico-caja chico">
             <canvas id="graficoSectores" role="img" aria-label="Gráfico de dona de la composición sectorial del valor agregado"></canvas>
           </div>
@@ -133,7 +141,7 @@
   </section>
 
   <!-- TABLA -->
-  <section class="seccion" style="padding-top:0;">
+  <section id="explorador-regional" tabindex="-1" class="seccion" style="padding-top:0;">
     <div class="contenedor">
       <div class="tarjeta" style="padding:24px;">
         <div class="seccion-cabecera">
@@ -142,9 +150,22 @@
             <p class="texto-tenue" style="font-size:0.85rem; margin-top:4px;" data-c="datos.tabla_descripcion">Conjunto de variables macroeconómicas con enlace a formatos abiertos.</p>
           </div>
           <div style="display:flex; gap:10px;">
-            <a href="data/indicadores.json" download class="btn btn-secundario btn-sm">⭳ Descargar JSON</a>
+            
           </div>
         </div>
+        <p class="texto-tenue">Los filtros se aplican a esta tabla; los gráficos muestran las series completas.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:end;margin-bottom:16px;">
+          <label style="flex:1;min-width:200px;">Buscar indicador, fuente o periodo
+            <input id="buscar-regional" type="search" placeholder="Ejemplo: PIB, arroz, 2024" style="display:block;width:100%;padding:10px;margin-top:6px;">
+          </label>
+          <label>Cobertura
+            <select id="cobertura-regional" style="display:block;max-width:100%;padding:10px;margin-top:6px;"><option value="">Todas las coberturas</option></select>
+          </label>
+          <button id="limpiar-regional" type="button" class="btn btn-secundario btn-sm">Limpiar filtros</button>
+          <button id="csv-regional" type="button" class="btn btn-primario btn-sm" disabled>Descargar resultados CSV</button>
+        </div>
+        <p data-sheet-status="tabla" role="status" class="texto-tenue"></p>
+        <p id="estado-regional" role="status" aria-live="polite" class="texto-tenue">Cargando indicadores…</p>
         <div class="tabla-scroll">
           <table class="tabla-indicadores">
             <thead>
@@ -218,6 +239,7 @@
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/contenido.js"></script>
+<script src="assets/js/sheets.js"></script>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/charts.js"></script>
 </body>

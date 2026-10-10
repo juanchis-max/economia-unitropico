@@ -8,32 +8,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const lienzo = document.getElementById('heroChartPreview');
   if (!lienzo) return;
   let grafico = null;
-  let desdeSheets = null;
-
-  function leerSheets() {
-    if (desdeSheets) return desdeSheets;
-    const url = typeof SHEET_URLS !== 'undefined' ? SHEET_URLS.pibSerie : '';
-    desdeSheets = !url || typeof Papa === 'undefined'
-      ? Promise.resolve(null)
-      : new Promise((resolve) => {
-          Papa.parse(url, {
-            download: true, header: true, skipEmptyLines: true,
-            complete: (r) => resolve(r.data),
-            error: () => resolve(null)
-          });
-        });
-    return desdeSheets;
-  }
-
   async function render() {
-    // Datos de respaldo por si nada más carga
-    let serie = { anios: ['2020', '2021', '2022', '2023', '2024'], casanare: [-14.2, 8.4, 4.1, 2.9, 3.8], nacional: [-7.0, 10.7, 7.3, 0.6, 1.8] };
-    const ind = window.CC ? await CC.indicadores() : null;
-    if (ind && ind.pib_serie && ind.pib_serie.anios) serie = ind.pib_serie;
-    const filas = await leerSheets();
-    if (filas && filas.length) {
-      serie = { anios: filas.map((f) => f.anio), casanare: filas.map((f) => parseFloat(f.casanare)), nacional: filas.map((f) => parseFloat(f.nacional)) };
-    }
+    if (window.CC) await CC.listo;
+    const result = await EconData.read('pibSerie');
+    EconData.source(document.getElementById('fuente-pib-inicio'), result);
+    if (grafico) { grafico.destroy(); grafico = null; }
+    const filas = result.rows;
+    const periodo = document.querySelector('[data-c="inicio.hero.grafico.periodo"]');
+    if (periodo) periodo.textContent = filas.length ? filas[0].anio + '–' + filas[filas.length-1].anio : 'Sin datos aprobados';
+    lienzo.parentElement.hidden = !filas.length;
+    if (!filas.length) return;
+    const serie = {anios:filas.map(f=>f.anio),casanare:filas.map(f=>EconData.number(f.casanare)),nacional:filas.map(f=>EconData.number(f.nacional))};
 
     if (typeof Chart === 'undefined') return;
     if (grafico) grafico.destroy();
